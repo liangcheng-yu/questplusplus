@@ -18,4 +18,10 @@
     <feature class="shef.mt.features.impl.doclevel.DocLevelFeature1074" description="number of punctuation marks in the source document" index="1074"/>
     <feature class="shef.mt.features.impl.doclevel.DocLevelFeature1075" description="number of punctuation marks in the target document" index="1075"/>
     
+    <!-- my extra features compared with baseline -->
+
+    <!-- <feature class="shef.mt.features.impl.doclevel.DocLevelFeature9999" description="mean dependency distance" index="9999"/> -->
+
+    <!-- Hapax Legomena: target里只出现一次的词占总次数的百分比, 只出现一次的词/总词数 -->
+    <feature class="shef.mt.features.impl.doclevel.DocLevelFeature1019" description="" index="1019"/>
 </features>
