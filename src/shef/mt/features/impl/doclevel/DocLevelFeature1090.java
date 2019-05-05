@@ -39,8 +39,9 @@ public class DocLevelFeature1090 extends DocLevelFeature {
         float noWords = 0;
         float noNouns = 0;
         for (int i=0;i<target.getSentences().size();i++){
-            noWords = target.getSentence(i).getNoTokens();
-            noNouns = (Integer) target.getSentence(i).getValue("nouns");
+            // Bug!! ZXY-YLC
+            noWords += target.getSentence(i).getNoTokens();
+            noNouns += (Integer) target.getSentence(i).getValue("nouns");
         }
         setValue(noNouns / noWords);
     }

@@ -25,7 +25,6 @@ public class DocLevelFeature1009 extends DocLevelFeature {
         this.addResource("source.lm");
     }
 
-
     @Override
     public void run(Doc source, Doc target) {
         ArrayList<Sentence> sentences = source.getSentences();
@@ -33,7 +32,7 @@ public class DocLevelFeature1009 extends DocLevelFeature {
         for(int i=0; i<sentences.size();i++){
             
             doc_log_prob+=(float) sentences.get(i).getValue("logprob");
-            
+            System.out.println("Feature 1009 doc_log_prob value: " + doc_log_prob);
         }
         
         setValue((float) doc_log_prob/sentences.size());

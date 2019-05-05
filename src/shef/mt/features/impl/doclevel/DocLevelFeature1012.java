@@ -33,6 +33,7 @@ public class DocLevelFeature1012 extends DocLevelFeature {
         for(int i=0; i<sentences.size();i++){
             
             doc_log_prob+=(float) sentences.get(i).getValue("logprob");
+            System.out.println("Feature 1012 doc_log_prob value: " + doc_log_prob);
         }
         setValue((float) doc_log_prob/sentences.size());
     }

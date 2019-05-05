@@ -19,7 +19,7 @@ public class DocLevelFeature1083 extends DocLevelFeature {
 
     public DocLevelFeature1083() {
         this.setIndex(1083);
-        this.setDescription("percentage of content words in the target documetn");
+        this.setDescription("percentage of content words in the target document");
         this.addResource("target.postagger");
         
     }
@@ -35,12 +35,18 @@ public class DocLevelFeature1083 extends DocLevelFeature {
 
     @Override
     public void run(Doc source, Doc target) {
+        System.out.println("=============>Inside the DocLevelFeature 1083");
         float noContent =0;
         float noWords =0;
         for(int i=0;i<target.getSentences().size();i++){
+            System.out.println("=============>Value of tokens num "+target.getSentence(i).getNoTokens());
             noWords+= target.getSentence(i).getNoTokens();
+            System.out.println("=============>Value of content words "+(Integer)target.getSentence(i).getValue("contentWords"));
+            System.out.println("=============>Value of noun words "+(Integer)target.getSentence(i).getValue("nouns"));
             noContent+= (Integer) target.getSentence(i).getValue("contentWords");
         }
+        System.out.println("=============>Value of noContents"+noContent);
+        System.out.println("=============>Value of noWords"+noWords);
         setValue(noContent / noWords);
     }
 }

@@ -24,13 +24,13 @@ public class DocLevelFeature9990 extends DocLevelFeature{
                 this.setDescription("Word repetition source document");
                 this.addResource("source.postagger");
                 this.addResource("discrep");
-		
 	}
 
     @Override
     public void run(Doc source, Doc target) {
         setValue((Float) source.getValue("word_repetition"));
     }
+    
     @Override
     public void run(Sentence source, Sentence target) {
         throw new UnsupportedOperationException("Not supported yet.");

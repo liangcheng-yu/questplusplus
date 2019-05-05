@@ -20,7 +20,6 @@ public class DocLevelFeature9801 extends DocLevelFeature {
 		// TODO Auto-generated constructor stub
 		this.setIndex(9801);
                 this.setDescription("Number of sentences in the target document");
-		
 	}
     
     @Override

@@ -36,6 +36,7 @@ public class DocLevelFeature9988 extends DocLevelFeature {
 
         setValue((Float) target.getValue("word_repetition"));
     }
+    
     @Override
     public void run(Sentence source, Sentence target) {
         throw new UnsupportedOperationException("Not supported yet.");

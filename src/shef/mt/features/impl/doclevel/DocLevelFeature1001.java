@@ -30,7 +30,7 @@ public class DocLevelFeature1001 extends DocLevelFeature {
             n_tokens+=sentences.get(i).getNoTokens();
         }
         setValue(n_tokens);
-
+        System.out.println("====================> Inside feature 1001!");
     }
 
     @Override

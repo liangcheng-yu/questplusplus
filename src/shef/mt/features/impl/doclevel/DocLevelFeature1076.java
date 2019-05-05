@@ -15,10 +15,10 @@ import shef.mt.features.util.Doc;
  * 
  * notice that this feature also supports extracting Chinese source language
  */
-public class DocLevelFeature1074 extends DocLevelFeature {
+public class DocLevelFeature1076 extends DocLevelFeature {
 
-    public DocLevelFeature1074() {
-        this.setIndex(1074);
+    public DocLevelFeature1076() {
+        this.setIndex(1076);
         this.setDescription("percentage of punctuation marks in source document");
     }
 
@@ -31,7 +31,6 @@ public class DocLevelFeature1074 extends DocLevelFeature {
     public void run(Doc source, Doc target) {
         int countS = 0;
         int countT = 0;
-        float noTokensSource = 0;
         for(int i=0;i<source.getSentences().size();i++){
             if (source.getSentence(i).isSet("count_.")) {
                 countS += (Integer) source.getSentence(i).getValue("count_.");
@@ -93,14 +92,66 @@ public class DocLevelFeature1074 extends DocLevelFeature {
             } else {
                 countS += source.getSentence(i).countChar(';');
             }
-
-            if (source.getSentence(i).isSet("noTokens")) {
-                noTokensSource += source.getSentence(i).getNoTokens();
-            }
         }
-        //setValue(countS / noTokensSource);
-        setValue(countS);
+        for(int i=0;i<target.getSentences().size();i++){
+            if (target.getSentence(i).isSet("count_.")) {
+                countT += (Integer) target.getSentence(i).getValue("count_.");
+            } else {
+                countT += target.getSentence(i).countChar('.');
+            }
+            if (target.getSentence(i).isSet("count_,")) {
+                countT += (Integer) target.getSentence(i).getValue("count_,");
+            } else {
+                countT += target.getSentence(i).countChar(',');
+            }
+            if (target.getSentence(i).isSet("count_؟")) {
+                countT += (Integer) target.getSentence(i).getValue("count_؟");
+            } else {
+                countT += target.getSentence(i).countChar('؟');
+            }
+            if (target.getSentence(i).isSet("count_¿")) {
+                countT += (Integer) target.getSentence(i).getValue("count_¿");
+            } else {
+                countT += target.getSentence(i).countChar('¿');
+            }
+            if (target.getSentence(i).isSet("count_،")) {
+                countT += (Integer) target.getSentence(i).getValue("count_،");
+            } else {
+                countT += target.getSentence(i).countChar('،');
+            }
+            if (target.getSentence(i).isSet("count_؛")) {
+                countT += (Integer) target.getSentence(i).getValue("count_؛");
+            } else {
+                countT += target.getSentence(i).countChar('؛');
+            }
+            if (target.getSentence(i).isSet("count_¡")) {
+                countT += (Integer) target.getSentence(i).getValue("count_¡");
+            } else {
+                countT += target.getSentence(i).countChar('¡');
+            }
+            if (target.getSentence(i).isSet("count_!")) {
+                countT += (Integer) target.getSentence(i).getValue("count_!");
+            } else {
+                countT += target.getSentence(i).countChar('!');
+            }
+            if (target.getSentence(i).isSet("count_?")) {
+                countT += (Integer) target.getSentence(i).getValue("count_?");
+            } else {
+                countT += target.getSentence(i).countChar('?');
+            }
+            if (target.getSentence(i).isSet("count_:")) {
+                countT += (Integer) target.getSentence(i).getValue("count_:");
+            } else {
+                countT += target.getSentence(i).countChar(':');
+            }
+            if (target.getSentence(i).isSet("count_;")) {
+                countT += (Integer) target.getSentence(i).getValue("count_;");
+            } else {
+                countT += target.getSentence(i).countChar(';');
+            }
+        }        
+        setValue((float) Math.abs(countS - countT) / countS);
         source.setValue("noPunct", countS);
-        
+        target.setValue("noPunct", countT);
     }
 }
