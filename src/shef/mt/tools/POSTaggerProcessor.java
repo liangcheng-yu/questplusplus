@@ -53,7 +53,6 @@ public class POSTaggerProcessor extends ResourceProcessor {
                         tag = tag.split(" ")[0];
                     } else if (PosTagger.isNoun(tag)) {
                         nounWords++;
-    //					System.out.println("is noun");
                     } else if (PosTagger.isPronoun(tag)) {
                         pronWords++;
                     } else if (PosTagger.isVerb(tag)) {
@@ -67,8 +66,6 @@ public class POSTaggerProcessor extends ResourceProcessor {
                 }
                 line = brPOSTagger.readLine();
             }
-            
-            
             
             //   bwXPos.newLine();
             contentWords = nounWords + verbWords + otherContentWords;

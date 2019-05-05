@@ -57,8 +57,8 @@ public class PosTagger extends Resource {
     public static void setPronTags(String[] pronTags) {
         PronTags = pronTags;
     }
-    public static String[] AdditionalTags = {"JJ", "JJR", "JJS", "RB", "RBR", "RBS", "ADJ", "ADV"};
-    public static String[] PronTags = {"PP", "PRP", "PPX"};
+    public static String[] AdditionalTags = {"JJ", "JJR", "JJS", "RB", "RBR", "RBS", "ADJ", "ADV", "b", "m", "d", "a"};
+    public static String[] PronTags = {"PP", "PRP", "PPX", "r"};
     static boolean alwaysRun;
 
     public String run() {
@@ -102,8 +102,8 @@ public class PosTagger extends Resource {
 
     public static boolean isVerb(String tag) {
         // 07/03/2012: Reimplemented by Mariano
-        return tag.length() > 0 ? (tag.charAt(0) == 'V') : false;
-
+        return tag.length() > 0 ? (tag.charAt(0) == 'V') || (tag.charAt(0) == 'v') : false;
+        // 26/04/2019: Add Chinese support
 //                for (String crtTag:VerbTags)
 //			if (tag.equals(crtTag))
 //				return true;
@@ -112,7 +112,7 @@ public class PosTagger extends Resource {
 
     public static boolean isNoun(String tag) {
         // 07/03/2012: Reimplemented by Mariano
-        return tag.length() > 0 ? (tag.charAt(0) == 'N') : false;
+        return tag.length() > 0 ? (tag.charAt(0) == 'N') || (tag.charAt(0) == 'n') : false;
 //                for (String crtTag:NounTags)
 //			if (tag.equals(crtTag))
 //				return true;

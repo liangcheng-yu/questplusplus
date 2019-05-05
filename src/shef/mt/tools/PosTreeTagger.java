@@ -44,8 +44,7 @@ public class PosTreeTagger extends PosTagger {
             Process p = pb.start();
             InputStream stderr = p.getErrorStream();
             InputStream stdout = p.getInputStream();
-            BufferedReader brIn = new BufferedReader(new FileReader(input));
-            //BufferedReader brIn = new BufferedReader(new InputStreamReader(new FileInputStream(input), "UTF8"));
+            BufferedReader brIn = new BufferedReader(new InputStreamReader(new FileInputStream(input), "UTF8"));
             BufferedWriter bw = new BufferedWriter(new FileWriter(output));
             BufferedWriter bwXPos = new BufferedWriter(new FileWriter(output + getXPOS()));
             BufferedWriter bwPosLemm = new BufferedWriter(new FileWriter(output + getXPOS()+".lemm"));
@@ -54,7 +53,6 @@ public class PosTreeTagger extends PosTagger {
             String inputLine;
             String line = "";
             int tokCount = 0;
-            
             //int lineCount = 0;
 
             String completeLine;
@@ -75,11 +73,15 @@ public class PosTreeTagger extends PosTagger {
                         
                         //throw new Exception("Failed to synchronize with tree-tagger's output");
                     }
-                    
                     if (split.length > 1){
                         bwXPos.write(split[1] + " ");
-                        bwPosLemm.write(split[0] + "_" + split[1] + "_" + split[2]+ ":::");
-                        
+                        if (split.length > 2){
+                            bwPosLemm.write(split[0] + "_" + split[1] + "_" + split[2]+ ":::");
+                        }
+                        else{
+                            // For Chinese tagging output
+                            bwPosLemm.write(split[0] + "_" + split[1] + "_" + split[0]+ ":::");
+                        }
                     }else{
                         System.err.println("Tagger could not tag token "+split[0]+" in line: "+origLine);
                     }

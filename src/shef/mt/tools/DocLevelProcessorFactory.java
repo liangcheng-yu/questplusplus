@@ -36,8 +36,7 @@ public class DocLevelProcessorFactory {
 
         //Allocate source and target processor vectors:
         sourceProcessors = new ArrayList<>();
-        targetProcessors = new ArrayList<>();
-        
+        targetProcessors = new ArrayList<>(); 
         if (requirements.contains("source.ngram") || requirements.contains("target.ngram")) {
             //Run SRILM on ngram count files:
             NgramCountProcessor[] ngramProcessors = this.getNgramProcessors();
@@ -56,8 +55,6 @@ public class DocLevelProcessorFactory {
             //Add them to processor vectors:
             targetProcessors.add(ngramProcessorTarget);
         }
-
-       
 
         if (requirements.contains("postags") || requirements.contains("depcounts")) {
             //Get parsing processors:
@@ -119,7 +116,6 @@ public class DocLevelProcessorFactory {
         if (requirements.contains("depcounts")) {
             ResourceManager.registerResource("depcounts");
         }
-
         //Get paths to Stanford Parser source language models:
         String POSModel = this.fe.getResourceManager().getProperty(this.fe.getSourceLang() + ".POSModel");
         String parseModel = this.fe.getResourceManager().getProperty(this.fe.getSourceLang() + ".parseModel");
