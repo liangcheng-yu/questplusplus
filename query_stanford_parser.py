@@ -37,11 +37,17 @@ def ParseHtml(text):
     depDistanceSum = 0
     for line in lines:
         # Excluding ROOT
-        if not re.search("ROOT",line):
-            numStrs = re.findall("\d+", line)
-            index2 = int(numStrs[-1])
-            index1 = int(re.findall(r"-(.+?),", line)[0])
-            depDistanceSum += abs(index1-index2)
+        if line:
+            if not re.search("ROOT",line):
+                try:
+                    numStrs = re.findall("\d+", line)
+                    print(line)
+                    print(numStrs)
+                    index2 = int(numStrs[-1])
+                    index1 = int(re.findall(r"-(.+?),", line)[0])
+                    depDistanceSum += abs(index1-index2)
+                except:
+                    pass
     print("Token number: {0}, dependency distance sum: {1}".format(numTokens, depDistanceSum))
     return numTokens, depDistanceSum
 
@@ -66,24 +72,24 @@ FetchSentenceQueryRes("截至 2015 年 六月 底 , 全国 机动车 保有量 �
 sourceDir = "/Users/liangchengyu/questplusplus/input/ch_text_ordered/"
 targetDir = "/Users/liangchengyu/questplusplus/input/en_text_ordered/"
 
-print("=== Process source texts ===")
-filenames = os.listdir(sourceDir) # unordered
-filenames.sort()
-with open('sourceDepDistance.txt', 'w', encoding="utf-8") as outfile:
-    for filename in filenames:
-        docDepDistanceSum = 0.0
-        docNumTokens = 0.0
-        numSentences = 0
-        with open(sourceDir+filename, 'r', encoding='utf-8') as infile:
-            print(sourceDir+filename)
-            lines = infile.readlines()
-            for line in lines:
-                numSentences += 1
-                numTokens, depDistanceSum = FetchSentenceQueryRes(line, "Chinese")
-                docDepDistanceSum += depDistanceSum
-                docNumTokens += numTokens
-        print("Doc {0} with {1} sentences, mean dependency distance: {2}".format(filename, numSentences, docDepDistanceSum/(docNumTokens-numSentences)))
-        outfile.write(str(docDepDistanceSum/(docNumTokens-numSentences))+"\n")
+# print("=== Process source texts ===")
+# filenames = os.listdir(sourceDir) # unordered
+# filenames.sort()
+# with open('sourceDepDistance.txt', 'w', encoding="utf-8") as outfile:
+#     for filename in filenames:
+#         docDepDistanceSum = 0.0
+#         docNumTokens = 0.0
+#         numSentences = 0
+#         with open(sourceDir+filename, 'r', encoding='utf-8') as infile:
+#             print(sourceDir+filename)
+#             lines = infile.readlines()
+#             for line in lines:
+#                 numSentences += 1
+#                 numTokens, depDistanceSum = FetchSentenceQueryRes(line, "Chinese")
+#                 docDepDistanceSum += depDistanceSum
+#                 docNumTokens += numTokens
+#         print("Doc {0} with {1} sentences, mean dependency distance: {2}".format(filename, numSentences, docDepDistanceSum/(docNumTokens-numSentences)))
+#         outfile.write(str(docDepDistanceSum/(docNumTokens-numSentences))+"\n")
 
 print("=== Process target texts ===")
 filenames = os.listdir(targetDir) # unordered
