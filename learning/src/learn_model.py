@@ -3,22 +3,18 @@
 '''
 learn_model -- Program that learns machine translation quality estimation
 models
-
 learn_model is a program with which is possible to learn models for
 sentence-pair quality estimation models using the algorithms implemented in the
 scikit-learn machine learning toolkit.
-
 It defines functions to work with different machine learning algorithms as well
 as feature selection techniques and features preprocessing. The only dependency
 so far is the sklearn package. ConfigParser is used to parse the configuration
 file which has a similar layout to the Java properties file.
-
 @author:     Jose' de Souza
         
 @copyright:  2012. All rights reserved.
         
 @license:    Apache License 2.0
-
 @contact:    jose.camargo.souza@gmail.com
 @deffield    updated: Updated
 '''
@@ -40,6 +36,7 @@ import numpy as np
 import os
 import sys
 import yaml
+import json
 
 from customize_scorer import pearson_corrcoef, binary_precision, classify_report_bin, classify_report_bin_regression, classify_report_regression
 
@@ -289,7 +286,7 @@ def set_learning_method(config, X_train, y_train):
     return estimator, scorers
 
 
-def fit_predict(config, X_train, y_train, X_test=None, y_test=None, ref_thd=None):
+def fit_predict(config, X_train, y_train, X_test=None, y_test=None, ref_thd=None, outputDir=None, seedTag=None):
     '''
     Uses the configuration dictionary settings to train a model using the
     specified training algorithm. If set, also evaluates the trained model 
@@ -383,8 +380,21 @@ def fit_predict(config, X_train, y_train, X_test=None, y_test=None, ref_thd=None
         with open("predicted.csv", 'w') as _fout:
             for _x,  _y in zip(y_test, y_hat):
                 print >> _fout,  "%f\t%f" % (_x,  _y)
+    print "Log the resulting JSON file"
+    print pearson_corrcoef(y_test,  y_hat)
+    pearson_corrcoefs = pearson_corrcoef(y_test,  y_hat).split()
+    print(pearson_corrcoefs)
+    outputDict = {
+        "pearson_r": float(pearson_corrcoefs[0]),
+        "pearson_p": float(pearson_corrcoefs[1]),
+        "MAE": mean_absolute_error(y_test, y_hat),
+        "RMSE": root_mean_squared_error(y_test, y_hat),
+    }
+    print "Write the JSON file to "+outputDir+seedTag
+    with open(outputDir+seedTag, 'w') as f:
+        json.dump(outputDict, f)
 
-def run(config):
+def run(config, outputDir=None, seedTag=None):
     '''
     Runs the main code of the program. Checks for mandatory parameters, opens
     input files and performs the learning steps.
@@ -434,7 +444,10 @@ def run(config):
         X_train, X_test = scale_datasets(X_train, X_test)
 
     # fits training data and predicts the test set using the trained model
-    y_hat = fit_predict(config, X_train, y_train, X_test, y_test, config.get("ref_thd", None))
+    print "Check the outputDir: "+outputDir
+    print "Check the seedTag: "+seedTag
+    y_hat = fit_predict(config, X_train, y_train, X_test, y_test, config.get("ref_thd", None), 
+        outputDir, seedTag)
     
     
 def main(argv=None): # IGNORE:C0111
@@ -451,7 +464,6 @@ def main(argv=None): # IGNORE:C0111
     program_version_message = '%%(prog)s %s (%s)' % (program_version, program_build_date)
     program_shortdesc = __import__('__main__').__doc__.split("\n")[1]
     program_license = '''%s
-
   Created by José de Souza on %s.
   Copyright 2012. All rights reserved.
   
@@ -460,7 +472,6 @@ def main(argv=None): # IGNORE:C0111
   
   Distributed on an "AS IS" basis without warranties
   or conditions of any kind, either express or implied.
-
 USAGE
 ''' % (program_shortdesc, str(__date__))
 
@@ -475,9 +486,14 @@ USAGE
                             help="set verbosity level [default: %(default)s]")
         parser.add_argument('-V', '--version', action='version', 
                             version=program_version_message)
+        parser.add_argument("--seed")
+        parser.add_argument("--outputDir")
 
         # Process arguments
         args = parser.parse_args()
+
+        print "Output Dir: "+args.outputDir
+        print "Seed tag: "+args.seed
         
         cfg_path = args.configuration_file
         
@@ -491,7 +507,7 @@ USAGE
         with open(cfg_path, "r") as cfg_file:
             config = yaml.load(cfg_file.read())
          
-        run(config)
+        run(config, outputDir=args.outputDir, seedTag=args.seed)
         
         
     except KeyboardInterrupt:
